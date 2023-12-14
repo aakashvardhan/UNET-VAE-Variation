@@ -7,10 +7,11 @@ from decoder_mini_block import DecoderMiniBlock
 
 class UNet(LightningModule):
     
-    def __init__(self, in_channels, out_channels, n_filters, dropout=0, cr_method="max_pooling",ce_method="upsample"):
+    def __init__(self, config, in_channels, out_channels, n_filters, dropout=0):
         super().__init__()
         
         # Contraction / Encoding Block
+        cr_method = config['compression_method']
         self.enc1 = EncoderMiniBlock(in_channels,
                                      n_filters // 8,
                                      dropout=dropout,
@@ -32,6 +33,7 @@ class UNet(LightningModule):
                                     cr_method=cr_method)
         
         # Expansion / Decoding Block
+        ce_method = config['expansion_method']
         self.dec1 = DecoderMiniBlock(n_filters,
                                      n_filters // 2,
                                      dropout=dropout,
