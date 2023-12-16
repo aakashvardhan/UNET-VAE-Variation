@@ -8,5 +8,6 @@ from lightning import LightningModule
 
 class LitUNet(LightningModule):
     def __init__(self,
-                 config,
-                 
+                 config):
+        super().__init__()
+        self.config = config

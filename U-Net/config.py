@@ -11,4 +11,6 @@ def get_config():
         'lr': 1e-3,
         'expansion_method': 'max_pooling',
         'compression_method': 'upsample',
+        'num_classes': 3,
+        'softmax_dim': 1,
     }
