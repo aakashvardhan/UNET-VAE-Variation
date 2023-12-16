@@ -13,4 +13,7 @@ def get_config():
         'compression_method': 'upsample',
         'num_classes': 3,
         'softmax_dim': 1,
+        'loss_method': 'dice_loss',
+        'epochs': 24,
+        'max_lr': 1e-3,
     }
