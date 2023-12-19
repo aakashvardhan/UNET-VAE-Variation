@@ -1,0 +1,6 @@
+lightning
+pathlib
+torchsummary
+kaggle
+torchmetrics
+torch_lr_finder
