@@ -1,5 +1,5 @@
 import os
-
+import torch
 def get_config():
     return {
         'batch_size': 32,
@@ -16,4 +16,5 @@ def get_config():
         'loss_method': 'dice_loss',
         'epochs': 24,
         'max_lr': 1e-3,
+        'device': 'cuda' if torch.cuda.is_available() else 'cpu'
     }
