@@ -25,47 +25,47 @@ class LitUNet(LightningModule):
         elif self.config['loss_method'] == 'cross_entropy':
             self.loss_fn = nn.CrossEntropyLoss()
         
-        def forward(self, x):
-            return self.model(x)
+    def forward(self, x):
+        return self.model(x)
+    
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.config['lr'])
+        scheduler = {
+            'scheduler':torch.optim.lr_scheduler.OneCycleLR(optimizer,
+                                                        max_lr=self.config['max_lr'],
+                                                        steps_per_epoch=int(len(self.train_dataloader())),
+                                                        epochs=self.config['epochs']),
+            'interval':'step',
+            'frequency':1}
+        return [optimizer], [scheduler]
+    
+    def training_step(self, batch, batch_idx):
+        x = batch['image']
+        y = batch['mask']
+        y_hat = self(x)
+        loss = self.loss_fn(y_hat, y)
         
-        def configure_optimizers(self):
-            optimizer = torch.optim.Adam(self.parameters(), lr=self.config['lr'])
-            scheduler = {
-                'scheduler':torch.optim.lr_scheduler.OneCycleLR(optimizer,
-                                                            max_lr=self.config['max_lr'],
-                                                            steps_per_epoch=int(len(self.train_dataloader())),
-                                                            epochs=self.config['epochs']),
-                'interval':'step',
-                'frequency':1}
-            return [optimizer], [scheduler]
+        #accuracy metrics
+        self.train_acc(y_hat, y)
+        self.log('train_acc', self.train_acc, on_step=True, on_epoch=True)
         
-        def training_step(self, batch, batch_idx):
-            x = batch['image']
-            y = batch['mask']
-            y_hat = self(x)
-            loss = self.loss_fn(y_hat, y)
-            
-            #accuracy metrics
-            self.train_acc(y_hat, y)
-            self.log('train_acc', self.train_acc, on_step=True, on_epoch=True)
-            
-            #log loss
-            self.log('train_loss', loss, on_step=True, on_epoch=False)
-            return loss
+        #log loss
+        self.log('train_loss', loss, on_step=True, on_epoch=False)
+        return loss
+    
+    def validation_step(self, batch, batch_idx):
+        x = batch['image']
+        y = batch['mask']
+        y_hat = self(x)
+        loss = self.loss_fn(y_hat, y)
         
-        def validation_step(self, batch, batch_idx):
-            x = batch['image']
-            y = batch['mask']
-            y_hat = self(x)
-            loss = self.loss_fn(y_hat, y)
-            
-            #accuracy metrics
-            self.val_acc(y_hat, y)
-            self.log('val_acc', self.val_acc, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-            
-            #log loss
-            self.log('val_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-            return loss
+        #accuracy metrics
+        self.val_acc(y_hat, y)
+        self.log('val_acc', self.val_acc, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        
+        #log loss
+        self.log('val_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+
         
             
             
