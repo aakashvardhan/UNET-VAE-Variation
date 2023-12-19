@@ -12,7 +12,6 @@ import os
 class OxfordIIIT(Dataset):
     
     def __init__(self,
-                 image_dir,
                  imgs_file: list[str],
                  masks_file: list[str],
                  transform_img: transforms.Compose = None,
