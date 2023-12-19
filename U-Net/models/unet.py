@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from lightning import LightningModule
-from encoder_mini_block import EncoderMiniBlock
-from decoder_mini_block import DecoderMiniBlock
+from models.encoder_mini_block import EncoderMiniBlock
+from models.decoder_mini_block import DecoderMiniBlock
 
 class UNet(LightningModule):
     

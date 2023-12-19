@@ -4,7 +4,7 @@ import torch.nn.functional as F
 from lightning import LightningModule
 from models.unet import UNet
 from dice_loss import DiceLoss
-
+from config import get_config
 
 class LitUNet(LightningModule):
     def __init__(self,
@@ -17,6 +17,8 @@ class LitUNet(LightningModule):
                           out_channels=3,
                           n_filters=64,
                           dropout=0.05)
+        
+        self.accuracy = accuracy
         
         if self.config['loss_method'] == 'dice_loss':
             self.loss_fn = DiceLoss(config)
@@ -38,8 +40,12 @@ class LitUNet(LightningModule):
             return [optimizer], [scheduler]
         
         def training_step(self, batch, batch_idx):
-            x, y = batch
+            x = batch['image']
+            y = batch['mask']
             y_hat = self(x)
             loss = self.loss_fn(y_hat, y)
-            self.log('train_loss', loss)
-            return loss
+            
+            #accuracy metrics
+            
+            
+            

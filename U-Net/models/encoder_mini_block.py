@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from lightning import LightningModule
-from double_conv2d import DoubleConv
+from models.double_conv2d import DoubleConv
 
 
 
