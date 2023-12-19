@@ -43,6 +43,15 @@ class OxfordIIIT(Dataset):
                 transforms.ToTensor(),
             ])
             transformed_mask = self.transform_mask(masks) * 255 - 1.0
-        return transformed_img, transformed_mask
+        return {'image': transformed_img, 'mask': transformed_mask}
+    
+    def show_img_mask(self, idx: int):
+        imgs = self.imgs_file[idx]
+        masks = self.masks_file[idx]
+        plt.subplot(1, 2, 1)
+        plt.imshow(imgs)
+        plt.subplot(1, 2, 2)
+        plt.imshow(masks)
+        plt.show()
     
 
