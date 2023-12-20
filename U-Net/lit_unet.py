@@ -33,7 +33,7 @@ class LitUNet(LightningModule):
         scheduler = {
             'scheduler':torch.optim.lr_scheduler.OneCycleLR(optimizer,
                                                         max_lr=self.config['max_lr'],
-                                                        steps_per_epoch=int(len(self.train_dataloader())),
+                                                        steps_per_epoch=int(len(self.trainer.datamodule.train_dataloader())),
                                                         epochs=self.config['epochs']),
             'interval':'step',
             'frequency':1}
