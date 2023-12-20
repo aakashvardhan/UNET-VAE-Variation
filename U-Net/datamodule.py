@@ -21,21 +21,22 @@ class DataModule(LightningDataModule):
         self.val_mask_lst = []
         
     def prepare_data(self):
-        train_pd = pd.read_csv(self.config['train_f'], sep=self.sep, header=None)[0].tolist()
-        val_pd = pd.read_csv(self.config['val_f'], sep=self.sep, header=None)[0].tolist()
-        
-        [self.train_img_lst.append(os.path.join(self.config['img_dir'], i + ".jpg")) for i in train_pd]
-        [self.train_mask_lst.append(os.path.join(self.config['mask_dir'], i + ".png")) for i in train_pd]
-        [self.val_img_lst.append(os.path.join(self.config['img_dir'], i + ".jpg")) for i in val_pd]
-        [self.val_mask_lst.append(os.path.join(self.config['mask_dir'], i + ".png")) for i in val_pd]
-        print(f"Number of training images: {len(self.train_img_lst)}")
-        print(f"Number of training masks: {len(self.train_mask_lst)}")
-        print(f"Number of validation images: {len(self.val_img_lst)}")
-        print(f"Number of validation masks: {len(self.val_mask_lst)}")
-        print("Data preparation complete!")
+        pass
+    
+    def setup(self, stage=None):
+        if stage == 'fit' or stage is None:
+            train_pd = pd.read_csv(self.config['train_f'], sep=self.sep, header=None)[0].tolist()
+            val_pd = pd.read_csv(self.config['val_f'], sep=self.sep, header=None)[0].tolist()
+
+            self.train_img_lst = [os.path.join(self.config['img_dir'], i + ".jpg") for i in train_pd]
+            self.train_mask_lst = [os.path.join(self.config['mask_dir'], i + ".png") for i in train_pd]
+            self.val_img_lst = [os.path.join(self.config['img_dir'], i + ".jpg") for i in val_pd]
+            self.val_mask_lst = [os.path.join(self.config['mask_dir'], i + ".png") for i in val_pd]
+
+            self.train_dataset = ox.OxfordIIIT(self.train_img_lst, self.train_mask_lst)
+            self.val_dataset = ox.OxfordIIIT(self.val_img_lst, self.val_mask_lst)
             
     def train_dataloader(self) -> DataLoader:
-        self.train_dataset = ox.OxfordIIIT(self.train_img_lst, self.train_mask_lst)
         return DataLoader(self.train_dataset,
                           batch_size=self.config['batch_size'],
                           num_workers=self.config['num_workers'],
@@ -43,7 +44,6 @@ class DataModule(LightningDataModule):
                           shuffle=True)
         
     def val_dataloader(self) -> DataLoader:
-        self.val_dataset = ox.OxfordIIIT(self.val_img_lst, self.val_mask_lst)
         return DataLoader(self.val_dataset,
                           batch_size=self.config['batch_size'],
                           num_workers=self.config['num_workers'],
