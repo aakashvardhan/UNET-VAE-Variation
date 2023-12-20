@@ -3,10 +3,10 @@ import torch
 def get_config():
     return {
         'batch_size': 32,
-        'train_f': '/kaggle/input/the-oxfordiiit-pet-dataset/annotations/annotations/trainval.txt',
-        'val_f': '/kaggle/input/the-oxfordiiit-pet-dataset/annotations/annotations/test.txt',
-        'img_dir': './kaggle/input/oxford-iiit-pet-dataset/images/images',
-        'mask_dir': './kaggle/input/oxford-iiit-pet-dataset/annotations/annotations/trimaps',
+        'train_f': './kaggle/input/the-oxfordiiit-pet-dataset/annotations/annotations/trainval.txt',
+        'val_f': './kaggle/input/the-oxfordiiit-pet-dataset/annotations/annotations/test.txt',
+        'img_dir': './kaggle/input/the-oxfordiiit-pet-dataset/images/images',
+        'mask_dir': './kaggle/input/the-oxfordiiit-pet-dataset/annotations/annotations/trimaps',
         'num_workers': os.cpu_count(),
         'lr': 1e-3,
         'expansion_method': 'upsample',
