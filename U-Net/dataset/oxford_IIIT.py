@@ -30,6 +30,8 @@ class OxfordIIIT(Dataset):
     def __getitem__(self, idx: int):
         imgs = self.imgs_file[idx]
         masks = self.masks_file[idx]
+        imgs = Image.open(imgs)
+        masks = Image.open(masks)
         if self.transform_img is None:
             self.transform_img = transforms.Compose([
                 transforms.Resize(self.img_size),
@@ -42,7 +44,7 @@ class OxfordIIIT(Dataset):
                 transforms.Resize(self.img_size),
                 transforms.ToTensor(),
             ])
-            transformed_mask = self.transform_mask(masks) * 255 - 1.0
+            transformed_mask = self.transform_mask(masks) * 255.0 - 1.0
         return {'image': transformed_img, 'mask': transformed_mask}
     
     def show_img_mask(self, idx: int):
