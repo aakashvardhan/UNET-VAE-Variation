@@ -8,7 +8,9 @@ from config import get_config
 import torchmetrics
 class LitUNet(LightningModule):
     def __init__(self,
-                 config):
+                 config,
+                 lr=1e-3,
+                 max_lr=1e-3):
         super().__init__()
         self.config = config
         self.save_hyperparameters()
@@ -17,7 +19,8 @@ class LitUNet(LightningModule):
                           out_channels=3,
                           n_filters=64,
                           dropout=0.05)
-        
+        self.lr = lr
+        self.max_lr = max_lr
         self.train_acc = torchmetrics.classification.Accuracy(task="multiclass", num_classes=config['num_classes'])
         
         if self.config['loss_method'] == 'dice_loss':
@@ -29,10 +32,10 @@ class LitUNet(LightningModule):
         return self.model(x)
     
     def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=self.config['lr'])
+        optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         scheduler = {
             'scheduler':torch.optim.lr_scheduler.OneCycleLR(optimizer,
-                                                        max_lr=self.config['max_lr'],
+                                                        max_lr=self.max_lr,
                                                         steps_per_epoch=int(len(self.trainer.datamodule.train_dataloader())),
                                                         epochs=self.config['epochs']),
             'interval':'step',
