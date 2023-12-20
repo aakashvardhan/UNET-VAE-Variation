@@ -25,8 +25,8 @@ class DataModule(LightningDataModule):
     
     def setup(self, stage=None):
         if stage == 'fit' or stage is None:
-            train_pd = pd.read_csv(self.config['train_f'], sep=self.sep, header=None)[0].tolist()
-            val_pd = pd.read_csv(self.config['val_f'], sep=self.sep, header=None)[0].tolist()
+            train_pd = pd.read_csv(self.config['train_f'], sep=self.sep, header=None)[0].to_list()
+            val_pd = pd.read_csv(self.config['val_f'], sep=self.sep, header=None)[0].to_list()
 
             self.train_img_lst = [os.path.join(self.config['img_dir'], i + ".jpg") for i in train_pd]
             self.train_mask_lst = [os.path.join(self.config['mask_dir'], i + ".png") for i in train_pd]
