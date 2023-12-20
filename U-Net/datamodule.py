@@ -8,7 +8,7 @@ import pandas as pd
 class DataModule(LightningDataModule):
     def __init__(self,
                  config,
-                sep=',',
+                sep=' ',
                 pin_memory: bool = True):
         super().__init__()
         self.sep = sep
