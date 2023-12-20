@@ -28,13 +28,20 @@ class DataModule(LightningDataModule):
             train_pd = pd.read_csv(self.config['train_f'], sep=self.sep, header=None)[0].to_list()
             val_pd = pd.read_csv(self.config['val_f'], sep=self.sep, header=None)[0].to_list()
 
-            self.train_img_lst = [os.path.join(self.config['img_dir'], i + ".jpg") for i in train_pd]
-            self.train_mask_lst = [os.path.join(self.config['mask_dir'], i + ".png") for i in train_pd]
-            self.val_img_lst = [os.path.join(self.config['img_dir'], i + ".jpg") for i in val_pd]
-            self.val_mask_lst = [os.path.join(self.config['mask_dir'], i + ".png") for i in val_pd]
+            for i in train_pd:
+                self.train_img_lst.append(os.path.join(self.config['img_dir'], i + ".jpg"))
+                self.train_mask_lst.append(os.path.join(self.config['mask_dir'], i + ".png"))
+            
+            for i in val_pd:
+                self.val_img_lst.append(os.path.join(self.config['img_dir'], i + ".jpg"))
+                self.val_mask_lst.append(os.path.join(self.config['mask_dir'], i + ".png"))
 
             self.train_dataset = ox.OxfordIIIT(self.train_img_lst, self.train_mask_lst)
             self.val_dataset = ox.OxfordIIIT(self.val_img_lst, self.val_mask_lst)
+            
+            print(f"Number of training samples: {len(self.train_dataset)}")
+            print(f"Number of validation samples: {len(self.val_dataset)}")
+            
             
     def train_dataloader(self) -> DataLoader:
         return DataLoader(self.train_dataset,
