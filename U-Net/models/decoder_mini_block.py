@@ -9,7 +9,7 @@ class DecoderMiniBlock(LightningModule):
     def __init__(self, in_channels, out_channels, ce_method="upsample", dropout=0):
         super().__init__()
         self.dropout = nn.Dropout2d(dropout)
-        self.double_conv2d = DoubleConv(in_channels, out_channels)
+        self.double_conv2d = DoubleConv(in_channels + out_channels, out_channels)
         
         if ce_method == "upsample":
             self.ce = nn.Upsample(scale_factor=2, mode="bilinear", align_corners=True)
