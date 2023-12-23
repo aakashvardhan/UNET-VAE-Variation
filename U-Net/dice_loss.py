@@ -17,17 +17,17 @@ class DiceLoss(LightningModule):
         if y_true.dtype != torch.long:
             y_true = y_true.long()
 
+        # Check the shape of y_true and remove extra dimension if present
+        if y_true.dim() == 4 and y_true.shape[1] == 1:
+            y_true = y_true.squeeze(1)  # Removes the channel dimension
+
         # Apply softmax to y_pred if required
         prob = y_pred
         if self.config['softmax_dim'] is not None:
             prob = nn.Softmax(dim=self.config['softmax_dim'])(y_pred)
 
-        # Convert y_true to one-hot encoding
-        # Shape of y_true after one_hot will be (N, H, W, num_classes)
-        y_true = F.one_hot(y_true, num_classes=self.config['num_classes'])
-
-        # Rearrange the tensor dimensions to (N, num_classes, H, W)
-        y_true = y_true.permute(0, 3, 1, 2).float()
+        # Convert y_true to one-hot encoding and rearrange dimensions
+        y_true = F.one_hot(y_true, num_classes=self.config['num_classes']).permute(0, 3, 1, 2).float()
 
         # Calculate dice loss
         numerator = 2 * torch.sum(prob * y_true, dim=(2, 3))
