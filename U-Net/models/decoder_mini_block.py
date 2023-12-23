@@ -20,8 +20,13 @@ class DecoderMiniBlock(LightningModule):
         
     def forward(self, x, skip):
         x = self.ce(x)
-        print('x.shape: ', x.shape)
-        print('skip.shape: ', skip.shape)
+        # Adjust the size of x or skip here if they don't match
+        if x.shape[-2:] != skip.shape[-2:]:
+            # Assuming x is larger and needs cropping
+            # Calculate the difference in size and crop
+            delta_height = x.shape[2] - skip.shape[2]
+            delta_width = x.shape[3] - skip.shape[3]
+            x = x[:, :, delta_height//2 : x.shape[2] - delta_height//2, delta_width//2 : x.shape[3] - delta_width//2]
         x = torch.cat([x, skip], dim=1)
         x = self.double_conv2d(x)
         x = self.dropout(x)
