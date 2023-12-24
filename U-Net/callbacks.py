@@ -24,7 +24,7 @@ class PlotExampleCallback(pl.Callback):
         self.config = config
         self.interval = interval
         
-    def on_validation_epoch_end(self, trainer):
+    def on_validation_epoch_end(self, trainer, *args, **kwargs):
         epoch = trainer.current_epoch
         if epoch % self.interval == 0:
             print(f"\n Plotting example image from validation set at epoch {epoch}")
