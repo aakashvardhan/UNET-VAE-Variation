@@ -22,7 +22,7 @@ class LitUNet(LightningModule):
         self.lr = lr
         self.max_lr = max_lr
         self.train_acc = torchmetrics.classification.Accuracy(task="multiclass", num_classes=config['num_classes'])
-        
+        self.val_acc = torchmetrics.classification.Accuracy(task="multiclass", num_classes=config['num_classes'])
         if self.config['loss_method'] == 'dice_loss':
             self.loss_fn = DiceLoss(config)
         elif self.config['loss_method'] == 'cross_entropy':
