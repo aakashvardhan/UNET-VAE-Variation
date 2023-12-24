@@ -45,6 +45,7 @@ class LitUNet(LightningModule):
     def training_step(self, batch, batch_idx):
         x = batch['image']
         y = batch['mask']
+        y = y.squeeze(1).to(dtype=torch.long)
         y_hat = self(x)
         loss = self.loss_fn(y_hat, y)
         
@@ -59,6 +60,7 @@ class LitUNet(LightningModule):
     def validation_step(self, batch, batch_idx):
         x = batch['image']
         y = batch['mask']
+        y = y.squeeze(1).to(dtype=torch.long)
         y_hat = self(x)
         loss = self.loss_fn(y_hat, y)
         
