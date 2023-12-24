@@ -20,6 +20,7 @@ class DecoderMiniBlock(LightningModule):
         
     def forward(self, x, skip):
         x = self.ce(x)
+        print(f"x shape: {x.shape}, skip shape: {skip.shape}")
         x = torch.cat([x, skip], dim=1)
         x = self.double_conv2d(x)
         x = self.dropout(x)
