@@ -26,7 +26,7 @@ class DecoderMiniBlock(LightningModule):
         else:
             x = self.ce(x)
 
-        print(f"x shape: {x.shape}, skip shape: {skip.shape}")
+        # print(f"x shape: {x.shape}, skip shape: {skip.shape}")
 
         # Concatenate along the channel dimension
         x = torch.cat([x, skip], dim=1)

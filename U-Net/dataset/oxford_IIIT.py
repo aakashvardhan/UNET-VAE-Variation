@@ -35,7 +35,7 @@ class OxfordIIIT(Dataset):
         img_path = self.imgs_file[idx]
         mask_path = self.masks_file[idx]
 
-        img = Image.open(img_path)
+        img = Image.open(img_path).convert('RGB')  # Convert image to RGB
         mask = Image.open(mask_path)
 
         transformed_img = self.transform_img(img)
