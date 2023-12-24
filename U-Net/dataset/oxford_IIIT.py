@@ -4,7 +4,7 @@ from PIL import Image
 import matplotlib.pyplot as plt
 
 class OxfordIIIT(Dataset):
-    def __init__(self, imgs_file, masks_file, transform_img=None, transform_mask=None, img_size=(224, 224)):
+    def __init__(self, imgs_file, masks_file, transform_img=None, transform_mask=None, img_size=(240, 240)):
         super().__init__()
         self.imgs_file = imgs_file
         self.masks_file = masks_file
